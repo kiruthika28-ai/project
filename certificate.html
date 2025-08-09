@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Certificate of Completion</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    body {
+      background: #f2f2f2;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 30px;
+    }
+
+    .certificate-container {
+      width: 80%;
+      margin: auto;
+      background: #fff;
+      border: 10px double #0077cc;
+      padding: 40px;
+      position: relative;
+      box-shadow: 0 0 20px rgba(0, 119, 204, 0.3);
+    }
+
+    .badge {
+      position: absolute;
+      top: -30px;
+      right: -30px;
+      background: gold;
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      line-height: 80px;
+      font-size: 40px;
+      color: white;
+      box-shadow: 0 0 10px gold;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    .certificate-container h1 {
+      font-size: 2.5em;
+      color: #0077cc;
+    }
+
+    .certificate-container p {
+      font-size: 1.2em;
+      margin: 20px 0;
+    }
+
+    .highlight {
+      font-weight: bold;
+      color: #e91e63;
+    }
+
+    .info {
+      margin-top: 40px;
+      font-size: 1em;
+      color: #333;
+    }
+
+    #downloadBtn {
+      margin-top: 30px;
+      padding: 12px 25px;
+      font-size: 16px;
+      background: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #downloadBtn:hover {
+      background: #005fa3;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="certificate-container" id="certificate">
+    <div class="badge">🏆</div>
+
+    <h1>Certificate of Completion</h1>
+    <p>This is to certify that</p>
+
+    <p class="highlight" id="userName">[Your Name]</p>
+
+    <p>has successfully completed the online quiz and demonstrated proficiency in</p>
+    <p class="highlight">JavaScript Fundamentals</p>
+
+    <div class="info">
+      <p><strong>Certificate ID:</strong> <span id="certID"></span></p>
+      <p><strong>Date Issued:</strong> <span id="dateIssued"></span></p>
+    </div>
+
+    <button id="downloadBtn">Download as PDF</button>
+  </div>
+
+  <!-- jsPDF CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <script>
+    // User name from previous page/session (fallback for demo)
+    const name = localStorage.getItem('userName') || prompt("Enter your name for the certificate:");
+
+    document.getElementById('userName').innerText = name;
+
+    // Generate certificate number
+    const certID = 'CERT-' + Math.floor(100000 + Math.random() * 900000);
+    document.getElementById('certID').innerText = certID;
+
+    // Set current date
+    const today = new Date().toLocaleDateString();
+    document.getElementById('dateIssued').innerText = today;
+
+    // Download as PDF
+    document.getElementById('downloadBtn').addEventListener('click', () => {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      doc.html(document.getElementById("certificate"), {
+        callback: function (pdf) {
+          pdf.save("certificate.pdf");
+        },
+        x: 10,
+        y: 10,
+        width: 180
+      });
+    });
+  </script>
+</body>
+</html>
