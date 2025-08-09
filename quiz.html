@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Quiz</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h2>JavaScript Basics Quiz</h2>
+  <div id="quizContainer">
+    <p id="question">Question text here</p>
+    <div id="options"></div>
+    <button onclick="nextQuestion()">Next</button>
+  </div>
+  <script>
+    const questions = [
+      {
+        q: "What does HTML stand for?",
+        options: ["Hyper Text Markup Language", "Home Tool Markup Language", "Hyperlinks and Text Markup Language"],
+        answer: 0
+      },
+      {
+        q: "Which company developed JavaScript?",
+        options: ["Mozilla", "Netscape", "Microsoft"],
+        answer: 1
+      }
+    ];
+
+    let current = 0;
+    let score = 0;
+
+    function loadQuestion() {
+      const q = questions[current];
+      document.getElementById("question").textContent = q.q;
+      const options = document.getElementById("options");
+      options.innerHTML = "";
+      q.options.forEach((opt, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = opt;
+        btn.onclick = () => checkAnswer(i);
+        options.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(i) {
+      if (i === questions[current].answer) score++;
+      current++;
+      if (current < questions.length) {
+        loadQuestion();
+      } else {
+        document.getElementById("quizContainer").innerHTML = `<h3>You scored ${score}/${questions.length}</h3>
+        <a href="certificate.html">Get Certificate</a>`;
+      }
+    }
+
+    function nextQuestion() {
+      loadQuestion();
+    }
+
+    window.onload = loadQuestion;
+  </script>
+</body>
+</html>
